@@ -25,38 +25,33 @@ def write_csv_file():
 
 def get_dict_row():
     with open("bug_reports.csv", "r", newline='', encoding='utf-8') as file:
-        # csv_reader = csv.DictReader(file)
         return list(csv.DictReader(file))
-
-    # for row in csv_reader:
-    #     print(f"Bug ID : {row['Bug ID']}, Summary : {row['Summary']}, Desc : {row['Description']}, Severity : {row['Severity']}, Attempts : {row['Verification Attempts']}, Seen : {row['Verification Seen']}, Build Found in : {row['Build Seen In']}, Platform : {row['Platform']}, Status : {row['Status']}")
 
 rows = get_dict_row()
 
-# def summary(row_dict):
-#     message = client.messages.create(
-#     model="claude-haiku-4-5-20251001",
-#     max_tokens=300,
-#     system = "You are a dev lead triaging a bug, read it and write a summary. The summary should always include : main issue and the subject should be the program or the build, not the component that's being tested, the repro rate based on attempts and seen where Attempts are deliverate QA repro tries; Seen is the total times the bug as occurred, including hits by users without deliberate attempts, so don't call Seen successful attempts, the severity letter and the status. If the build fixed in field is empty refer to the Status, for all bugs with the Closed(No Repro) status no fix build is expected, if the status is Closed(Fixed) then explicitly name the fix build. Use only facts present in the bug data, don't assume causes and don't recommend anything either. Name the status exactly as written. Severity status 'A' is the highest and it goes below to 'D', don't add your own words such as 'Critical', 'Emergency' or anything else you deem fit. always write the repro rate as X of Y attempts (Z%) .Limit to 2-3 sentences max in plain text only, begin directly with the first word of the summary. NEVER START WITH A LABEL LIKE 'SUMMARY' OR ANY OTHER HIGHLIGHTS",
-#     messages=[{"role": "user", "content": f"""Description : {row_dict['Description']} , Severity : {row_dict['Severity']} , Status : {row_dict['Status']}, Attempts : {row_dict['Verification Attempts']}, 
-#                Seen : {row_dict['Verification Seen']}, Build found in : {row_dict['Build Seen In']}, Build Fixed in : {row_dict['Build Fixed In']}, Platform : {row_dict['Platform']}"""}],
-#     )
-#     return(message.content[0].text)
-
-summaries = {}
-
-# for bug in rows:
-#     api_response = summary(bug)
-#     if api_response.lower().startswith("summary") or "**" in api_response:
-#         print(f"Warning : {bug['Bug ID']} starts with a label")
-#     summaries[bug['Bug ID']] = api_response
-#     print(bug['Bug ID'], ":", api_response)
+def summary(row_dict):
+    message = client.messages.create(
+    model="claude-haiku-4-5-20251001",
+    max_tokens=300,
+    system = "You are a dev lead triaging a bug, read it and write a summary. The summary should always include : main issue and the subject should be the program or the build, not the component that's being tested, the repro rate based on attempts and seen where Attempts are deliverate QA repro tries; Seen is the total times the bug as occurred, including hits by users without deliberate attempts, so don't call Seen successful attempts, the severity letter and the status. If the build fixed in field is empty refer to the Status, for all bugs with the Closed(No Repro) status no fix build is expected, if the status is Closed(Fixed) then explicitly name the fix build. Use only facts present in the bug data, don't assume causes and don't recommend anything either. Name the status exactly as written. Severity status 'A' is the highest and it goes below to 'D', don't add your own words such as 'Critical', 'Emergency' or anything else you deem fit. always write the repro rate as X of Y attempts (Z%) .Limit to 2-3 sentences max in plain text only, begin directly with the first word of the summary. NEVER START WITH A LABEL LIKE 'SUMMARY' OR ANY OTHER HIGHLIGHTS",
+    messages=[{"role": "user", "content": f"""Description : {row_dict['Description']} , Severity : {row_dict['Severity']} , Status : {row_dict['Status']}, Attempts : {row_dict['Verification Attempts']}, 
+               Seen : {row_dict['Verification Seen']}, Build found in : {row_dict['Build Seen In']}, Build Fixed in : {row_dict['Build Fixed In']}, Platform : {row_dict['Platform']}"""}],
+    )
+    return(message.content[0].text)
     
-def save_results(filename):
+def save_results(filename, data):
     with open(filename, "w", encoding='utf-8') as file:
-        json.dump(summaries, file, indent=2)
+        json.dump(data, file, indent=2)
 
-# save_results("summaries.json")
+def generate_summaries():
+    summaries = {}
+    for bug in rows:
+        api_response = summary(bug)
+        if api_response.lower().startswith("summary") or "**" in api_response:
+            print(f"Warning : {bug['Bug ID']} starts with a label")
+        summaries[bug['Bug ID']] = api_response
+        print(bug['Bug ID'], ":", api_response)
+    save_results("summaries.json", summaries)
 
 def load_results(filename):
     with open(filename, "r") as file:
@@ -80,19 +75,7 @@ for row in rows:
     sev_counts[sev] = sev_counts.get(sev, 0) + 1
     status_counts[status] = status_counts.get(status, 0) + 1
 
-# print(sev_counts)
-# print(status_counts)
-
 lines = []
-# lines.append("Severity Counts : ")
-
-# for sev, count in sorted(sev_counts.items()):
-#     lines.append(f"{sev} : {count}")
-
-# lines.append("")
-# lines.append("Status Counts :")
-# for status, count in sorted(status_counts.items()):
-#     lines.append(f"{status} : {count}")
 
 sorted_rows = sorted(rows, key=lambda p: p["Severity"])
 
@@ -103,8 +86,6 @@ for row in sorted_rows:
     lines.append(f"{bug_id} : {final_data[bug_id]}")
 
 report_input = "\n".join(lines)
-# print(report_input)
-
 
 def generate_report(text):
     message2 = client.messages.create(
@@ -122,9 +103,6 @@ def generate_report(text):
     )
     return message2.content[0].text
 
-# final_result = generate_report(report_input)
-# print(final_result)
-
 sev_line = []
 for sev, count in sorted(sev_counts.items()):
     sev_string = (f"{sev} : {count}")
@@ -137,8 +115,6 @@ for status, count in sorted(status_counts.items()):
     status_string = (f"{status} : {count}")
     status_line.append(status_string)
 status_text = ", ".join(status_line)
-
-# full_report = "\n".join([sev_text, status_text, "", final_result])
 
 def check_report(report):
     bug_id_flag = True
@@ -207,8 +183,6 @@ def save_report(report_text, check_results, filename):
     res_dict = {"Report" :report_text, "Results" : check_results}
     with open(filename, "w", encoding='utf-8') as file:
         json.dump(res_dict, file, indent=2, ensure_ascii=False)
-# results = check_report(full_report)
-# save_report(full_report, results, "report_results.json")
 
 passed = 0
 for i in range(4):
