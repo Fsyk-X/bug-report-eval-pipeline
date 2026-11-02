@@ -1,0 +1,10 @@
+{
+  "Report": "A : 3, B : 2, C : 1, D : 2\nClosed(Fixed) : 2, Closed(No Repro) : 1, Fixed(Awaiting Build) : 1, Fixing : 2, Needs Repro : 2\n\nBUG-001 Severity A Status Closed(Fixed) fixed in build v245.01 Ray Tracing Settings crash in Graphics menu when toggled On, causing complete program failure 5 of 5 attempts\nBUG-003 Severity A Status Needs Repro Sparse Memory Alloc program crashes after approximately 5.5 hours of operation due to memory exhaustion 4 of 10 attempts\nBUG-005 Severity A Status Fixing Xbox game experiences severe FPS degradation to 20-25 during extended driving sequences in v256.0, requiring a system reboot to resolve 4 of 6 attempts\nBUG-006 Severity B Status Fixing Password reset OTP delivery fails on initial attempts in v37.02, requiring users to retry 3-4 times before receiving the code 10 of 10 attempts\nBUG-007 Severity B Status Closed(Fixed) fixed in build v256.0 Playstation program build incompatible with latest Sony SDK requiring reboot and reinstall workaround 5 of 16 attempts\nBUG-004 Severity C Status Closed(No Repro) Contact Us page exhibits intermittent flickering when scrolling in Light Mode theme on Windows 1 of 7 attempts\nBUG-002 Severity D Status Fixed(Awaiting Build) fixed in build v36.03 App home page displays misspelled \"Enail\" label instead of \"Email\" in the login form 12 of 12 attempts\nBUG-008 Severity D Status Needs Repro Dialogue subtitles for Mitch are truncated after the first line in the Caribbean Sea mission on Linux v258.3 2 of 7 attempts",
+  "Results": {
+    "Bug IDs": true,
+    "Severity": true,
+    "Status": true,
+    "Order": true,
+    "Lines": true
+  }
+}

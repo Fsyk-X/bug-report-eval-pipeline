@@ -1,0 +1,10 @@
+{
+  "BUG-001": "Ray Tracing Settings crash in Graphics menu when toggled On, causing complete program failure with 100% reproducibility (5 of 5 attempts, 5 times seen). Severity A, fixed in build v245.01, Status Closed(Fixed).",
+  "BUG-002": "App home page displays misspelled \"Enail\" label instead of \"Email\" in the login form with a repro rate of 12 of 12 attempts (100%). Severity D, status Fixed(Awaiting Build), fixed in build v36.03.",
+  "BUG-003": "Sparse Memory Alloc program crashes after approximately 5.5 hours of operation due to memory exhaustion, occurring in 4 of 10 attempted reproductions (40%). Severity A, Status Needs Repro.",
+  "BUG-004": "Contact Us page exhibits intermittent flickering when scrolling in Light Mode theme on Windows, occurring 1 of 7 attempts (14%). Status is Closed(No Repro) with severity C.",
+  "BUG-005": "Xbox game experiences severe FPS degradation to 20-25 during extended driving sequences in v256.0, requiring a system reboot to resolve, with repro rate of 4 of 6 attempts (67%). Severity A, Status Fixing.",
+  "BUG-006": "Password reset OTP delivery fails on initial attempts in v37.02, requiring users to retry 3-4 times before receiving the code. Repro rate: 10 of 10 attempts (100%). Severity B, Status Fixing.",
+  "BUG-007": "Playstation program build incompatible with latest Sony SDK requiring reboot and reinstall workaround, reproduced 5 of 16 attempts (31%), severity B, Closed(Fixed) in v256.0.",
+  "BUG-008": "Dialogue subtitles for Mitch are truncated after the first line in the Caribbean Sea mission on Linux v258.3, with a repro rate of 2 of 7 attempts (29%). Status is Needs Repro and no fix build has been identified."
+}
