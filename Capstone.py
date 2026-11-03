@@ -157,7 +157,7 @@ def check_report(report):
             print("PASS ", row['Bug ID'])
         previous = pos
 
-    test_text = full_report.split("\n")
+    test_text = report.split("\n")
     line_flag = True
     for row in sorted_rows:
         for text in test_text:
@@ -184,13 +184,14 @@ def save_report(report_text, check_results, filename):
     with open(filename, "w", encoding='utf-8') as file:
         json.dump(res_dict, file, indent=2, ensure_ascii=False)
 
-passed = 0
-for i in range(4):
-    print(f"Run {i + 1}")
-    loop_report = generate_report(report_input)
-    full_report = "\n".join([sev_text, status_text, "", loop_report])
-    results = check_report(full_report)
-    save_report(full_report, results, f"report_results_{i}.json")
-    if all(results.values()):
-        passed += 1
-print(f"Total Passed : {passed}")
+if __name__ == "__main__":
+    passed = 0
+    for i in range(4):
+        print(f"Run {i + 1}")
+        loop_report = generate_report(report_input)
+        full_report = "\n".join([sev_text, status_text, "", loop_report])
+        results = check_report(full_report)
+        save_report(full_report, results, f"report_results_{i}.json")
+        if all(results.values()):
+            passed += 1
+    print(f"Total Passed : {passed}")
