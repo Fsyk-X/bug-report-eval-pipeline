@@ -157,7 +157,7 @@ def check_report(report):
             print("PASS ", row['Bug ID'])
         previous = pos
 
-    test_text = full_report.split("\n")
+    test_text = report.split("\n")
     line_flag = True
     for row in sorted_rows:
         for text in test_text:
